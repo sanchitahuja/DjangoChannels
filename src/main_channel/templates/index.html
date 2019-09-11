@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Django Room
+{% endblock %}
+
+{% block content %}
+	
+	<div class="container">
+		
+		<!-- textarea -->
+		<div class="form-group shadow-textarea">
+		    <label for="exampleFormControlTextarea6">Previous messages</label>
+		    <textarea class="form-control z-depth-1" id="chat-log" rows="5" placeholder="Write message here..."></textarea>
+		</div>
+
+
+	</div>
+
+{% endblock content %}
+
+{% block script %}
+	
+	<script>
+
+
+	    var chatSocket = new WebSocket(
+	        'ws://' + window.location.host +
+	        '/ws/data/' );
+		console.log('ws://' + window.location.host +
+	        '/ws/data/')
+	    chatSocket.onmessage = function(e) {
+	        var data = JSON.parse(e.data);
+	        document.querySelector('#chat-log').value += (data['key'] + '\n');
+	    };
+
+	    chatSocket.onclose = function(e) {
+	        console.error('Chat socket closed unexpectedly'+e);
+	    };
+
+
+	</script>
+
+{% endblock %}
